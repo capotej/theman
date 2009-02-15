@@ -1,0 +1,36 @@
+require 'rubygems'
+require 'rufus/scheduler'
+require 'logger'
+
+ROOT = File.dirname(__FILE__) + "/.."
+
+class Worker
+      
+  def self.inherited(subclass)
+    @@log = Logger.new(ROOT + "/log/#{subclass}.log")
+    @@sched = Rufus::Scheduler.start_new
+    @@subclass = subclass
+    
+  end
+
+  def self.logger(str)
+    @@log.info(str)
+  end
+
+  def self.every(str, &block)
+    @@sched.send(:every, str, &block) 
+    @@sched.join
+  end
+  
+  def self.cron(str, &block)
+    @@sched.send(:cron, str, &block)
+    @@sched.join
+  end
+
+  def self.start_in(str, &block)
+    @@sched.send(:in, str, &block)
+    @@sched.join
+   end
+
+
+end
