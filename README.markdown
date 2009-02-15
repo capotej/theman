@@ -14,7 +14,7 @@ This will start all the workers that have _worker.rb appended to them in the wor
 
 ## Writing your own workers
 
-A worker is nothing more than a ruby script that requires 'worker', subclasses Worker, lives in the worker directory with _worker.rb in the name. This is an example worker:
+A worker is nothing more than a ruby script that requires 'worker', subclasses Worker, and lives in the worker directory with _worker.rb in the name. This is an example worker:
 
        require 'worker'
 
