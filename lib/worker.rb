@@ -7,6 +7,7 @@ ROOT = File.dirname(__FILE__) + "/.."
 class Worker
       
   def self.inherited(subclass)
+    @@now = ARGV[0] || []
     @@log = Logger.new(ROOT + "/log/#{subclass}.log")
     @@sched = Rufus::Scheduler.start_new
     @@klass = subclass
@@ -30,9 +31,12 @@ class Worker
 
   def self.schedule(cmd, arg, m)
     caller = Proc.new { obj = @@klass.new; obj.send(m.to_sym) }
-    @@sched.send cmd, arg, &caller
+    if @@now.empty?
+      @@sched.send cmd, arg, &caller
+    else
+      @@sched.send :schedule_in, "1s", &caller
+    end
     @@sched.join
   end
-
 
 end
